@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController; // Tambahkan ini agar rute publik tidak error
 use App\Http\Controllers\ReturnRequestController;
 use App\Http\Controllers\MitraController;
+use App\Http\Controllers\GoogleOAuthController;
 
 // ==========================================
 // RUTE PUBLIK (Bisa diakses tanpa login)
@@ -28,6 +29,12 @@ Route::post('/login', [AuthController::class, 'loginPost']);
 Route::get('/register', [AuthController::class, 'register']);
 Route::post('/register', [AuthController::class, 'registerPost']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// ==========================================
+// GOOGLE OAUTH (Public)
+// ==========================================
+Route::get('/auth/google/redirect', [GoogleOAuthController::class, 'redirectToGoogle']);
+Route::get('/auth/google/callback', [GoogleOAuthController::class, 'handleGoogleCallback']);
 
 
 // ==========================================

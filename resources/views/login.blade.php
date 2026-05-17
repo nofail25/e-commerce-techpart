@@ -34,7 +34,17 @@
                     </div>
                 @endif
 
-                <form action="{{ url('/login') }}" method="POST" class="mt-7 space-y-5">
+                <a href="{{ url('/auth/google/redirect') }}" class="btn-primary w-full px-5 py-3.5 text-sm flex items-center justify-center gap-2 mb-4">
+                    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+                        <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.377 4.657-5.717 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.963 3.037l5.657-5.657C34.392 6.053 29.57 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.651-.389-3.917z"/>
+                        <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 19.134 12 24 12c3.059 0 5.842 1.154 7.963 3.037l5.657-5.657C34.392 6.053 29.57 4 24 4c-7.938 0-14.812 4.686-18.194 11.482z"/>
+                        <path fill="#4CAF50" d="M24 44c4.615 0 8.939-1.652 12.058-4.49l-5.817-5.817C28.438 35.777 26.3 36.5 24 36.5c-5.586 0-9.926-3.343-11.303-8l-6.571 4.819C8.88 39.314 15.753 44 24 44z"/>
+                        <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.512 1.734-1.44 3.287-2.68 4.487l.024.024 6.571 4.819C40.109 36.007 44 30.479 44 24c0-1.341-.138-2.651-.389-3.917z"/>
+                    </svg>
+                    Login with Google
+                </a>
+
+                <form action="{{ url('/login') }}" method="POST" class="space-y-5">
                     @csrf
                     <div>
                         <label class="field-label">Email</label>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -95,6 +96,58 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Gagal mendaftar: ' . $e->getMessage()]);
         }
+    }
+
+    // ===== Google OAuth =====
+
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')
+            ->scopes(['email', 'profile'])
+            ->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        $googleUser = Socialite::driver('google')->stateless()->user();
+
+        $googleId = $googleUser->getId();
+        $email = $googleUser->getEmail();
+
+        // Prioritas: google_id
+        $user = User::where('google_id', $googleId)->first();
+
+        // Fallback aman: email (agar akun yang sudah ada bisa "diikat" google_id-nya)
+        if (!$user && $email) {
+            $user = User::where('email', $email)->first();
+        }
+
+        // Jika belum ada, buat user baru (default: regular)
+        if (!$user) {
+            $user = User::create([
+                'name' => $googleUser->getName() ?: ($email ? strtok($email, '@') : 'Google User'),
+                'email' => $email ?: ($googleId . '@google.local'),
+                'password' => Hash::make(\Illuminate\Support\Str::random(32)),
+                'role' => 'regular',
+                'upgradeRequested' => false,
+                'google_id' => $googleId,
+            ]);
+        } else {
+            // Jika user ditemukan lewat email, isi google_id agar login berikutnya konsisten
+            if (!$user->google_id) {
+                $user->google_id = $googleId;
+                $user->save();
+            }
+        }
+
+        Auth::login($user);
+        request()->session()->regenerate();
+
+        if (Auth::user()->role === 'admin') {
+            return redirect('/admin/dashboard')->with('success', 'Selamat datang kembali, Admin!');
+        }
+
+        return redirect('/katalog');
     }
 
     // Memproses Logout
