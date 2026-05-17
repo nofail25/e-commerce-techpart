@@ -64,10 +64,27 @@
                         @endphp
                         <div class="p-5 sm:p-6">
                             <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                                <div>
-                                    <h3 class="font-black text-ink">{{ $detail->product->name }}</h3>
-                                    <p class="mt-1 text-sm font-semibold text-slate-500">{{ $detail->qty }} x Rp {{ number_format($detail->price, 0, ',', '.') }}</p>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-12 h-12 bg-slate-100 rounded-lg overflow-hidden border border-slate-200 flex items-center justify-center shrink-0">
+                                        @if($detail->product->image)
+                                            <img src="{{ asset('storage/' . $detail->product->image) }}" alt="{{ $detail->product->name }}" class="w-full h-full object-cover">
+                                        @else
+                                            <i data-lucide="image" class="w-5 h-5 text-slate-400"></i>
+                                        @endif
+                                    </div>
+
+                                    <div>
+                                        <h3 class="font-black text-ink">
+                                            <a href="{{ url('/produk/' . $detail->product_id) }}" class="hover:underline">
+                                                {{ $detail->product->name }}
+                                            </a>
+                                        </h3>
+                                        <p class="mt-1 text-sm font-semibold text-slate-500">
+                                            {{ $detail->qty }} x Rp {{ number_format($detail->price, 0, ',', '.') }}
+                                        </p>
+                                    </div>
                                 </div>
+
                                 <div class="text-lg font-black tracking-[-0.03em] text-ink">Rp {{ number_format($detail->qty * $detail->price, 0, ',', '.') }}</div>
                             </div>
 
