@@ -55,7 +55,7 @@
                         ['label' => 'Semua', 'value' => '', 'icon' => 'layout-grid'],
                         ['label' => 'Layar LCD', 'value' => 'LCD Layar HP', 'icon' => 'smartphone'],
                         ['label' => 'Baterai Ori', 'value' => 'Baterai Ori', 'icon' => 'battery-charging'],
-                        ['label' => 'Sparepart', 'value' => 'Sparepart', 'icon' => 'settings-2'],
+                        ['label' => 'Komponen Lain', 'value' => 'Komponen Lain', 'icon' => 'settings-2'],
                         ['label' => 'Aksesoris', 'value' => 'Aksesoris', 'icon' => 'headphones'],
                     ];
                 @endphp
