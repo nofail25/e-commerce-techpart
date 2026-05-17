@@ -11,7 +11,7 @@
             <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(37,99,235,.16),transparent_35%),linear-gradient(135deg,#f8fafc,#e2e8f0)]"></div>
 
             @if($product->image)
-                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="relative h-full w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" decoding="async">
+                <img src="{{ Storage::disk('public')->url($product->image) }}" alt="{{ $product->name }}" class="relative h-full w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" decoding="async">
             @else
                 <div class="relative flex h-full w-full items-center justify-center text-slate-300">
                     <i data-lucide="cpu" class="h-16 w-16"></i>

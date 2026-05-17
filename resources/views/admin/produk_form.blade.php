@@ -130,7 +130,7 @@
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-3">Foto Saat Ini</label>
                         <div class="relative">
-                            <img src="{{ asset('storage/' . $product->image) }}" class="w-full h-48 object-cover rounded-lg border border-slate-200 shadow-sm">
+                            <img src="{{ Storage::disk('public')->url($product->image) }}" class="w-full h-48 object-cover rounded-lg border border-slate-200 shadow-sm">
                             <p class="text-xs text-slate-500 mt-2">Upload foto baru untuk mengganti gambar ini</p>
                         </div>
                     </div>

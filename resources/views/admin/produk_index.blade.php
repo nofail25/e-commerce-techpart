@@ -64,7 +64,7 @@
                         <td class="p-6 align-middle text-center">
                             <div class="w-12 h-12 bg-slate-100 rounded-lg overflow-hidden border border-slate-200 mx-auto flex items-center justify-center shrink-0 shadow-sm">
                                 @if($p->image)
-                                    <img src="{{ asset('storage/' . $p->image) }}" alt="{{ $p->name }}" class="w-full h-full object-cover">
+                                    <img src="{{ Storage::disk('public')->url($p->image) }}" alt="{{ $p->name }}" class="w-full h-full object-cover">
                                 @else
                                     <i data-lucide="image" class="w-5 h-5 text-slate-400"></i>
                                 @endif

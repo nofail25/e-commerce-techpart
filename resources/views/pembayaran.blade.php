@@ -140,7 +140,7 @@
                     <div class="flex gap-3">
                         <div class="h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-slate-100 ring-1 ring-slate-200">
                             @if($detail->product && $detail->product->image)
-                                <img src="{{ asset('storage/' . $detail->product->image) }}" alt="{{ $detail->product->name }}" class="h-full w-full object-cover">
+                                <img src="{{ Storage::disk('public')->url($detail->product->image) }}" alt="{{ $detail->product->name }}" class="h-full w-full object-cover">
                             @else
                                 <div class="grid h-full w-full place-items-center text-slate-300"><i data-lucide="package" class="h-6 w-6"></i></div>
                             @endif

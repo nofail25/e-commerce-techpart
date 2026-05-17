@@ -55,24 +55,28 @@
                     <input type="password" name="password" required class="input-modern px-4 py-3.5 text-sm font-semibold" placeholder="Minimal sesuai ketentuan sistem">
                 </div>
 
-                <div class="rounded-[1.5rem] border border-primary/20 bg-primary-50/70 p-5">
-                    <label class="flex cursor-pointer items-start gap-3">
-                        <input type="checkbox" name="is_mitra" id="is_mitra_checkbox" value="1" class="mt-1 h-5 w-5 rounded border-slate-300 text-primary focus:ring-primary" onchange="toggleUploadField()" {{ old('is_mitra') ? 'checked' : '' }}>
-                        <span>
-                            <span class="block text-sm font-black text-ink">Ajukan upgrade ke Mitra Teknisi</span>
-                            <span class="mt-1 block text-xs font-semibold leading-5 text-slate-500">Centang bila Anda teknisi/toko servis dan ingin mengajukan harga khusus.</span>
-                        </span>
-                    </label>
-
-                    <div id="upload_bukti_area" class="{{ old('is_mitra') ? '' : 'hidden' }} mt-4 rounded-2xl border border-dashed border-primary/25 bg-white/70 p-4">
-                        <label class="field-label">Foto toko / keterangan servis</label>
-                        <input type="file" name="bukti_toko" accept="image/*" class="w-full text-sm font-semibold text-slate-500 file:mr-4 file:rounded-full file:border-0 file:bg-primary-100 file:px-4 file:py-2 file:text-sm file:font-black file:text-primary hover:file:bg-primary-200">
-                    </div>
-                </div>
-
                 <button type="submit" class="btn-primary w-full px-5 py-3.5 text-sm">
                     Daftar Akun <i data-lucide="arrow-right" class="h-4 w-4"></i>
                 </button>
+
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-slate-200"></div>
+                    </div>
+                    <div class="relative flex justify-center text-xs uppercase">
+                        <span class="bg-white px-3 text-slate-400 font-semibold">atau</span>
+                    </div>
+                </div>
+
+                <a href="{{ url('/auth/google/redirect') }}" class="w-full px-5 py-3.5 text-sm font-bold text-slate-600 bg-white border-2 border-slate-200 rounded-full flex items-center justify-center gap-2 hover:border-primary hover:text-primary transition-colors">
+                    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+                        <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.377 4.657-5.717 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.963 3.037l5.657-5.657C34.392 6.053 29.57 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.651-.389-3.917z"/>
+                        <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 19.134 12 24 12c3.059 0 5.842 1.154 7.963 3.037l5.657-5.657C34.392 6.053 29.57 4 24 4c-7.938 0-14.812 4.686-18.194 11.482z"/>
+                        <path fill="#4CAF50" d="M24 44c4.615 0 8.939-1.652 12.058-4.49l-5.817-5.817C28.438 35.777 26.3 36.5 24 36.5c-5.586 0-9.926-3.343-11.303-8l-6.571 4.819C8.88 39.314 15.753 44 24 44z"/>
+                        <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.512 1.734-1.44 3.287-2.68 4.487l.024.024 6.571 4.819C40.109 36.007 44 30.479 44 24c0-1.341-.138-2.651-.389-3.917z"/>
+                    </svg>
+                    Daftar dengan Google
+                </a>
             </form>
 
             <div class="mt-7 rounded-2xl border border-slate-200/80 bg-white/60 p-4 text-center text-sm font-semibold text-slate-500">
@@ -83,12 +87,4 @@
     </div>
 </div>
 
-<script>
-    function toggleUploadField() {
-        const checkbox = document.getElementById('is_mitra_checkbox');
-        const uploadArea = document.getElementById('upload_bukti_area');
-        if (!checkbox || !uploadArea) return;
-        uploadArea.classList.toggle('hidden', !checkbox.checked);
-    }
-</script>
 @endsection

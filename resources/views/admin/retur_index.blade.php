@@ -71,7 +71,7 @@
                                 <div class="font-semibold text-slate-800 max-w-xs">{{ $return->product->name ?? 'Produk' }}</div>
                                 <div class="text-xs text-slate-500 mt-1.5">Qty: {{ $return->qty }}</div>
                                 @if($return->evidence_image)
-                                    <a href="{{ asset('storage/'.$return->evidence_image) }}" target="_blank" class="inline-flex items-center gap-1 text-xs font-semibold text-primary-600 hover:text-primary-700 mt-2 transition-colors">
+                                    <a href="{{ Storage::disk('public')->url($return->evidence_image) }}" target="_blank" class="inline-flex items-center gap-1 text-xs font-semibold text-primary-600 hover:text-primary-700 mt-2 transition-colors">
                                         <i data-lucide="image" class="w-3.5 h-3.5"></i> Lihat bukti
                                     </a>
                                 @endif

@@ -41,7 +41,7 @@
                     <article class="grid gap-4 p-5 sm:grid-cols-[96px_1fr_auto] sm:p-6 sm:items-center">
                         <div class="h-24 w-24 overflow-hidden rounded-3xl bg-slate-100 ring-1 ring-slate-200/70">
                             @if($item->product->image)
-                                <img src="{{ asset('storage/' . $item->product->image) }}" alt="{{ $item->product->name }}" class="h-full w-full object-cover">
+                                <img src="{{ Storage::disk('public')->url($item->product->image) }}" alt="{{ $item->product->name }}" class="h-full w-full object-cover">
                             @else
                                 <div class="grid h-full w-full place-items-center text-slate-300"><i data-lucide="package" class="h-9 w-9"></i></div>
                             @endif

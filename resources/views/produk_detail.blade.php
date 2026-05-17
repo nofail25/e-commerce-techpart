@@ -20,7 +20,7 @@
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(37,99,235,.18),transparent_35%),radial-gradient(circle_at_80%_90%,rgba(20,184,166,.16),transparent_32%)]"></div>
                 <div class="relative flex h-full min-h-[300px] items-center justify-center rounded-[1.5rem] border border-white/70 bg-white/50 p-4 backdrop-blur">
                     @if($product->image)
-                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="max-h-[500px] w-full object-contain drop-shadow-2xl">
+                        <img src="{{ Storage::disk('public')->url($product->image) }}" alt="{{ $product->name }}" class="max-h-[500px] w-full object-contain drop-shadow-2xl">
                     @else
                         <div class="grid h-40 w-40 place-items-center rounded-[2rem] bg-white/80 text-slate-300 shadow-soft">
                             <i data-lucide="cpu" class="h-20 w-20"></i>

@@ -136,8 +136,8 @@
                 <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <span class="eyebrow">Produk</span>
-                        <h2 class="mt-3 text-3xl font-black tracking-[-0.05em] text-ink">Katalog aktif</h2>
-                        <p class="mt-2 text-sm leading-6 text-slate-500">Grid dibuat lega, konsisten, dan nyaman dipindai di desktop maupun mobile.</p>
+                        <h2 class="mt-3 text-3xl font-black tracking-[-0.05em] text-ink">Rekomendasi</h2>
+                        <p class="mt-2 text-sm leading-6 text-slate-500">Produk yang direkomendasikan berdasarkan preferensi Anda.</p>
                     </div>
                 </div>
 
