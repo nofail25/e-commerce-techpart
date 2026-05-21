@@ -20,6 +20,12 @@ class CartController extends Controller
 
         $request->validate(['product_id' => 'required|exists:products,id']);
 
+        // Validasi stok produk
+        $product = Product::findOrFail($request->product_id);
+        if ($product->stock <= 0) {
+            return response()->json(['success' => false, 'message' => 'Maaf, produk ini stok habis'], 400);
+        }
+
         $cart = Cart::where('user_id', Auth::id())
                     ->where('product_id', $request->product_id)
                     ->first();

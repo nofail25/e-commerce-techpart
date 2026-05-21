@@ -51,10 +51,16 @@
 
             <form onsubmit="tambahKeKeranjang(event, {{ $product->id }})" class="mt-5">
                 @csrf
-                <button type="submit" class="btn-dark w-full px-4 py-3 text-sm">
-                    <i data-lucide="shopping-bag" class="h-4 w-4"></i>
-                    Keranjang
-                </button>
+                @if($product->stock > 0)
+                    <button type="submit" class="btn-dark w-full px-4 py-3 text-sm">
+                        <i data-lucide="shopping-bag" class="h-4 w-4"></i>
+                        Keranjang
+                    </button>
+                @else
+                    <button type="button" disabled class="w-full rounded-2xl bg-slate-200 px-4 py-3 text-sm font-black text-slate-500">
+                        Stok Habis
+                    </button>
+                @endif
             </form>
         </div>
     </article>
