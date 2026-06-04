@@ -105,18 +105,25 @@ class CartController extends Controller
     // --- FUNGSI 3: CHECKOUT DENGAN SISTEM BUKU ALAMAT ---
     public function checkout(Request $request)
     {
-        // Validasi pilihan alamat
+        // Validasi pilihan alamat dan cart_ids
         $request->validate([
             'address_option' => 'required',
             'new_label' => 'required_if:address_option,new',
             'new_address' => 'required_if:address_option,new',
             'payment_method' => 'required|in:' . implode(',', array_keys($this->paymentMethods())),
+            'cart_ids' => 'required|array',
+            'cart_ids.*' => 'exists:carts,id',
         ]);
 
-        $cartItems = Cart::with('product')->where('user_id', Auth::id())->get();
+        $cartIds = $request->input('cart_ids', []);
+
+        $cartItems = Cart::with('product')
+            ->where('user_id', Auth::id())
+            ->whereIn('id', $cartIds)
+            ->get();
 
         if ($cartItems->isEmpty()) {
-            return back()->withErrors(['error' => 'Keranjang Anda kosong!']);
+            return back()->withErrors(['error' => 'Pilih setidaknya satu produk untuk checkout!']);
         }
 
         // TENTUKAN ALAMAT PENGIRIMAN
@@ -180,8 +187,8 @@ class CartController extends Controller
         $order->total_price = $subtotal + $pajak;
         $order->save();
 
-        // Kosongkan keranjang
-        Cart::where('user_id', Auth::id())->delete();
+        // Kosongkan keranjang (hanya item yang dicheckout)
+        Cart::where('user_id', Auth::id())->whereIn('id', $cartIds)->delete();
 
         return redirect('/pembayaran/' . $order->id)->with('success', 'Checkout berhasil. Silakan selesaikan pembayaran Anda.');
     }

@@ -65,7 +65,13 @@ class ProductController extends Controller
         $product = \App\Models\Product::with(['reviews.user'])
             ->findOrFail($id);
 
+        $relatedProducts = \App\Models\Product::where('category', $product->category)
+            ->where('id', '!=', $product->id)
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
+
         // Tampilkan halaman produk_detail.blade.php
-        return view('produk_detail', compact('product'));
+        return view('produk_detail', compact('product', 'relatedProducts'));
     }
 }

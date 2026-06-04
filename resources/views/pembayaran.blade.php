@@ -55,17 +55,12 @@
                             </div>
                             <div>
                                 <div class="text-xs font-black uppercase tracking-[0.16em] text-slate-400">Kode QRIS</div>
-                                <div class="mt-2 break-all rounded-2xl border border-slate-200 bg-slate-50 p-4 font-mono text-lg font-black text-ink">{{ $order->payment_code }}</div>
-                                <p class="mt-4 text-sm leading-6 text-slate-500">Buka aplikasi bank/e-wallet, pilih QRIS, lalu scan atau gunakan kode ini.</p>
+                                <p class="mt-4 text-sm leading-6 text-slate-500">Buka aplikasi bank/e-wallet, pilih QRIS, lalu scan QR ini.</p>
                             </div>
                         </div>
                     @else
                         <div class="grid gap-4 md:grid-cols-2">
-                            <div class="rounded-[1.5rem] border border-slate-200 bg-white/70 p-5">
-                                <div class="text-xs font-black uppercase tracking-[0.16em] text-slate-400">{{ $order->payment_method === 'ewallet' ? 'Kode Pembayaran' : 'Virtual Account' }}</div>
-                                <div class="mt-3 break-all font-mono text-2xl font-black tracking-[-0.03em] text-ink">{{ $order->payment_code }}</div>
-                            </div>
-                            <div class="rounded-[1.5rem] border border-primary/20 bg-primary-50/70 p-5">
+                            <div class="rounded-[1.5rem] border border-primary/20 bg-primary-50/70 p-5 md:col-span-2">
                                 <div class="text-xs font-black uppercase tracking-[0.16em] text-primary">Total bayar</div>
                                 <div class="mt-3 text-2xl font-black tracking-[-0.04em] text-ink">Rp {{ number_format($order->total_price, 0, ',', '.') }}</div>
                             </div>
@@ -92,7 +87,7 @@
                     @switch($order->payment_method)
                         @case('bank_bca')
                         @case('bank_mandiri')
-                            @foreach(['Buka mobile banking, internet banking, atau ATM '.$selectedMethod['short'].'.', 'Pilih menu Transfer Virtual Account.', 'Masukkan nomor VA '.$order->payment_code.'.', 'Pastikan nominal sama persis: Rp '.number_format($order->total_price, 0, ',', '.').'.', 'Konfirmasi pembayaran lalu klik tombol Selesaikan Pembayaran.'] as $text)
+                            @foreach(['Buka mobile banking, internet banking, atau ATM '.$selectedMethod['short'].'.', 'Pilih menu Transfer Virtual Account.', 'Masukkan nomor VA yang diberikan / tersedia.', 'Pastikan nominal sama persis: Rp '.number_format($order->total_price, 0, ',', '.').'.', 'Konfirmasi pembayaran lalu klik tombol Selesaikan Pembayaran.'] as $text)
                                 <li class="flex gap-3"><span class="text-primary font-black">{{ $loop->iteration }}.</span><span>{{ $text }}</span></li>
                             @endforeach
                             @break
@@ -102,7 +97,7 @@
                             @endforeach
                             @break
                         @default
-                            @foreach(['Buka aplikasi e-wallet pilihan Anda.', 'Pilih menu Bayar Tagihan atau E-Commerce.', 'Masukkan kode pembayaran '.$order->payment_code.'.', 'Pastikan merchant TechPart dan nominal sudah benar.', 'Klik tombol pembayaran untuk menyelesaikan transaksi.'] as $text)
+                            @foreach(['Buka aplikasi e-wallet pilihan Anda.', 'Pilih menu Bayar Tagihan atau E-Commerce.', 'Masukkan kode pembayaran yang sesuai.', 'Pastikan merchant TechPart dan nominal sudah benar.', 'Klik tombol pembayaran untuk menyelesaikan transaksi.'] as $text)
                                 <li class="flex gap-3"><span class="text-primary font-black">{{ $loop->iteration }}.</span><span>{{ $text }}</span></li>
                             @endforeach
                     @endswitch

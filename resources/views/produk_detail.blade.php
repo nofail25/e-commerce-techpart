@@ -150,5 +150,20 @@
             </div>
         </div>
     </section>
+
+    @if(isset($relatedProducts) && $relatedProducts->count() > 0)
+    <section class="mt-6 sm:mt-10">
+        <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <span class="eyebrow">Pilihan Lain</span>
+                <h2 class="mt-3 text-3xl font-black tracking-[-0.05em] text-ink">Rekomendasi Produk</h2>
+            </div>
+            <a href="{{ url('/katalog?category=' . urlencode($product->category)) }}" class="btn-outline px-4 py-2.5 text-sm">Lihat Semua</a>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            @include('partials.product_list', ['products' => $relatedProducts])
+        </div>
+    </section>
+    @endif
 </div>
 @endsection

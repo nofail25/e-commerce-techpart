@@ -3,16 +3,14 @@
 
 @section('content')
     <section class="page-shell pt-10 sm:pt-14">
-        <div class="mesh-card rounded-[2rem] px-5 py-8 text-white shadow-glow sm:px-8 lg:px-10 lg:py-12">
+        <div class="mesh-card rounded-[2rem] px-5 py-8 text-white shadow-glow sm:px-8 lg:px-10 lg:py-12 animate-scale-in">
             <div class="relative z-10 grid gap-10 lg:grid-cols-[1.12fr_.88fr] lg:items-center">
-                <div>
-                    <span class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-2 text-xs font-black uppercase tracking-[0.18em] text-blue-100 backdrop-blur">
-                        <span class="status-dot bg-mint"></span> Ready stock original
-                    </span>
+                <div class="animate-slide-left">
+
                     <h1 class="mt-6 max-w-4xl text-4xl font-black leading-[1.02] tracking-[-0.06em] sm:text-5xl lg:text-7xl">
-                        Sparepart gadget yang terasa <span class="text-blue-200">lebih presisi</span> saat dicari.
+                        Sparepart gadget terlengkap, <span class="text-blue-200">pasti pas</span> untuk setiap kebutuhan.
                     </h1>
-                    <p class="mt-6 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">Temukan LCD, baterai, konektor, IC, dan aksesoris dengan filter yang sederhana, tampilan bersih, serta proses belanja yang cepat untuk customer maupun teknisi.</p>
+                    <p class="mt-6 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">Belanja LCD, baterai, konektor, hingga aksesoris kini makin praktis! Nikmati kemudahan mencari sparepart dalam hitungan detik berkat fitur pencarian pintar kami. Pas untuk customer, cepat untuk teknisi.</p>
                     <div class="mt-8 flex flex-col gap-3 sm:flex-row">
                         <button onclick="document.getElementById('katalog-section').scrollIntoView({behavior: 'smooth'})" class="btn-primary px-6 py-3.5 text-sm">
                             Mulai Belanja <i data-lucide="arrow-down" class="h-4 w-4"></i>
@@ -23,30 +21,30 @@
                     </div>
                 </div>
 
-                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 animate-slide-right">
                     <div class="rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur">
                         <i data-lucide="scan-search" class="h-7 w-7 text-blue-200"></i>
-                        <div class="mt-6 text-3xl font-black tracking-[-0.05em]">Filter cepat</div>
-                        <p class="mt-2 text-sm leading-6 text-slate-300">Cari berdasarkan kategori, brand, dan seri agar kompatibilitas lebih aman.</p>
+                        <div class="mt-6 text-3xl font-black tracking-[-0.05em]">Cari Sparepart Spesifik</div>
+                        <p class="mt-2 text-sm leading-6 text-slate-300"> Berdasarkan brand, kategori, dan seri agar dijamin 100% cocok dengan perangkat Anda.</p>
                     </div>
                     <div class="rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur xl:mt-10">
                         <i data-lucide="badge-check" class="h-7 w-7 text-mint"></i>
-                        <div class="mt-6 text-3xl font-black tracking-[-0.05em]">Bergaransi</div>
-                        <p class="mt-2 text-sm leading-6 text-slate-300">Pilih komponen dengan stok jelas, ulasan pembeli, dan harga mitra bila tersedia.</p>
+                        <div class="mt-6 text-3xl font-black tracking-[-0.05em]">Pasti Bergaransi</div>
+                        <p class="mt-2 text-sm leading-6 text-slate-300">Dapatkan produk berkualitas dengan stok terjamin, ulasan terpercaya, dan nikmati penawaran harga spesial khusus mitra!</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="kategori" class="page-shell mt-6 sm:mt-8">
+    <section id="kategori" class="page-shell mt-6 sm:mt-8 animate-fade-in-up" style="animation-delay: 150ms;">
         <div class="surface-card p-4 sm:p-5">
             <div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <span class="eyebrow">Kategori</span>
-                    <h2 class="mt-3 text-2xl font-black tracking-[-0.04em] text-ink">Pilih jalur pencarian</h2>
+                    <h2 class="mt-3 text-2xl font-black tracking-[-0.04em] text-ink">Temukan Kebutuhan Anda</h2>
                 </div>
-                <p class="max-w-md text-sm leading-6 text-slate-500">Kategori dibuat ringkas agar customer langsung masuk ke kebutuhan utama tanpa tampilan ramai.</p>
+                <p class="max-w-md text-sm leading-6 text-slate-500">Pilihan kategori ringkas yang dirancang khusus agar Anda bisa langsung belanja sparepart incaran tanpa ribet.</p>
             </div>
 
             <div class="hide-scrollbar flex gap-3 overflow-x-auto pb-2 md:grid md:grid-cols-5 md:overflow-visible md:pb-0">
@@ -65,7 +63,8 @@
                     <a href="{{ $category['value'] ? url('/katalog?category=' . urlencode($category['value'])) : url('/katalog') }}"
                        data-category-link
                        data-category="{{ $category['value'] }}"
-                       class="category-chip flex-none {{ $active ? 'is-active' : '' }}">
+                       class="category-chip flex-none staggered-item-delayed {{ $active ? 'is-active' : '' }}"
+                       style="--item-index: {{ $loop->index }}">
                         <span class="category-icon"><i data-lucide="{{ $category['icon'] }}" class="h-5 w-5"></i></span>
                         <span class="text-sm font-black">{{ $category['label'] }}</span>
                     </a>
@@ -76,7 +75,7 @@
 
     <section id="katalog-section" class="page-shell py-8 sm:py-10">
         <div class="grid gap-6 lg:grid-cols-[320px_1fr] lg:items-start">
-            <aside class="surface-card p-5 lg:sticky lg:top-24">
+            <aside class="surface-card p-5 lg:sticky lg:top-24 animate-slide-left" style="animation-delay: 200ms;">
                 <div class="mb-6 flex items-start justify-between gap-4">
                     <div>
                         <span class="eyebrow">Filter</span>
@@ -126,22 +125,22 @@
                     <div class="soft-card p-4">
                         <div class="flex gap-3">
                             <div class="grid h-9 w-9 shrink-0 place-items-center rounded-2xl bg-primary-50 text-primary"><i data-lucide="info" class="h-4 w-4"></i></div>
-                            <p class="text-xs font-semibold leading-6 text-slate-500">Gunakan brand dan seri untuk memastikan sparepart sesuai dengan perangkat Anda.</p>
+                            <p class="text-xs font-semibold leading-6 text-slate-500">Pilih brand dan seri yang tepat agar sparepart pas dan berfungsi maksimal di gadget kesayangan Anda!</p>
                         </div>
                     </div>
                 </div>
             </aside>
 
-            <div>
+            <div class="animate-slide-right" style="animation-delay: 250ms;">
                 <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <span class="eyebrow">Produk</span>
-                        <h2 class="mt-3 text-3xl font-black tracking-[-0.05em] text-ink">Rekomendasi</h2>
-                        <p class="mt-2 text-sm leading-6 text-slate-500">Produk yang direkomendasikan berdasarkan preferensi Anda.</p>
+                        <span class="eyebrow">Produk Terlaris</span>
+                        <h2 class="mt-3 text-3xl font-black tracking-[-0.05em] text-ink">Rekomendasi Spesial</h2>
+                        <p class="mt-2 text-sm leading-6 text-slate-500">Kurasi sparepart terbaik dan paling banyak dicari, khusus untuk Anda hari ini!</p>
                     </div>
                 </div>
 
-                <div id="product_container" class="grid min-h-[420px] grid-cols-1 gap-4 transition-opacity duration-300 sm:grid-cols-2 xl:grid-cols-3">
+                <div id="product_container" class="grid min-h-[420px] grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     @include('partials.product_list')
                 </div>
             </div>
@@ -224,9 +223,9 @@
             async function fetchFilteredProducts() {
                 if (fetchProductsController) fetchProductsController.abort();
 
-                container.style.opacity = '0.45';
-                container.style.pointerEvents = 'none';
-                loadingIndicator.style.display = 'flex';
+                container.classList.add('is-filtering');
+                loadingIndicator.classList.remove('hidden');
+                loadingIndicator.classList.add('flex', 'animate-scale-in');
 
                 fetchProductsController = new AbortController();
                 const url = buildFilterUrl();
@@ -245,9 +244,9 @@
                     console.error('Gagal filter produk:', error);
                     container.innerHTML = `<div class="col-span-full surface-card p-8 text-center text-rose-600"><strong>Gagal memuat produk.</strong><br><span class="text-sm text-slate-500">Silakan coba beberapa saat lagi.</span></div>`;
                 } finally {
-                    container.style.opacity = '1';
-                    container.style.pointerEvents = 'auto';
-                    loadingIndicator.style.display = 'none';
+                    container.classList.remove('is-filtering');
+                    loadingIndicator.classList.add('hidden');
+                    loadingIndicator.classList.remove('flex', 'animate-scale-in');
                 }
             }
 
