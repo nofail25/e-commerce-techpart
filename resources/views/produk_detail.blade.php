@@ -109,7 +109,7 @@
             <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <span class="eyebrow">Ulasan</span>
-                    <h2 class="mt-3 text-2xl font-black tracking-[-0.04em] text-ink">Suara pembeli</h2>
+                    <h2 class="mt-3 text-2xl font-black tracking-[-0.04em] text-ink">Ulasan Pelanggan</h2>
                 </div>
                 <div class="rounded-2xl bg-slate-900 px-4 py-3 text-white">
                     <div class="text-2xl font-black">{{ $reviewCount > 0 ? number_format($averageRating, 1) : '0.0' }}</div>

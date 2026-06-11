@@ -1,10 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PageController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController; // Tambahkan ini agar rute publik tidak error
@@ -51,6 +49,8 @@ Route::middleware('auth')->group(function () {
     
     // Fitur Checkout & Pesanan Saya
     Route::post('/checkout', [CartController::class, 'checkout']);
+    Route::get('/pesanan/{id}/lengkap', [CartController::class, 'lengkap']);
+    Route::post('/pesanan/{id}/lengkap', [CartController::class, 'simpanLengkap']);
     Route::get('/pembayaran/{id}', [CartController::class, 'pembayaran']);
     Route::post('/pembayaran/{id}/metode', [CartController::class, 'ubahMetodePembayaran']);
     Route::post('/pembayaran/{id}/bayar', [CartController::class, 'prosesPembayaran']);

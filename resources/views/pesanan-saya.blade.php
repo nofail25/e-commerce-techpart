@@ -126,10 +126,6 @@
 
                         <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
                             @if($order->status === 'pending')
-                                <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm">
-                                    <div class="font-black text-ink">{{ $paymentLabels[$order->payment_method] ?? 'Payment Gateway' }}</div>
-                                    <div class="mt-1 text-xs font-semibold text-slate-500">{{ optional($order->created_at)->format('d M Y, H:i') }}</div>
-                                </div>
                                 <a href="{{ url('/pembayaran/'.$order->id) }}" class="btn-primary px-5 py-3 text-sm"><i data-lucide="credit-card" class="h-4 w-4"></i> Bayar</a>
                             @elseif($order->status === 'dikemas' || $order->status === 'diproses')
                                 <div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-500">Pesanan sedang dikemas.</div>

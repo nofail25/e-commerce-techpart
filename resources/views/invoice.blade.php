@@ -88,7 +88,7 @@
                         <span>Total belanja</span>
                         <span class="font-black text-slate-900">Rp {{ number_format($order->total_price, 0, ',', '.') }}</span>
                     </div>
-                    <p class="mt-4 text-xs font-semibold leading-5 text-slate-400">Harga di atas mengikuti total transaksi pada sistem dan sudah termasuk pajak yang berlaku bila diterapkan.</p>
+                    <p class="mt-4 text-xs font-semibold leading-5 text-slate-400">Harga di atas mengikuti total transaksi pada sistem.</p>
                 </div>
             </div>
         </section>

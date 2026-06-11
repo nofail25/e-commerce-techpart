@@ -142,6 +142,12 @@ class AdminController extends Controller
     // ==========================================
     // 4. AREA MANAJEMEN PRODUK
     // ==========================================
+    public function kelolaProduk()
+    {
+        $products = Product::orderBy('created_at', 'desc')->get();
+        return view('admin.produk_index', compact('products'));
+    }
+
     public function tambahProduk()
     {
         return view('admin.produk_form');

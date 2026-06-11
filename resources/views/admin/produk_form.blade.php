@@ -38,7 +38,28 @@
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">Kategori <span class="text-rose-500">*</span></label>
-                        <input type="text" name="category" value="{{ $product->category ?? old('category') }}" placeholder="Contoh: LCD Layar Hp" required class="w-full border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all">
+                        @php
+                            $categories = [
+                                'LCD Layar HP',
+                                'Baterai Ori',
+                                'Konektor',
+                                'IC / Chipset',
+                                'Kamera',
+                                'Fleksibel',
+                                'Casing / Backdoor',
+                                'Speaker / Mic',
+                                'Peralatan / Tools',
+                                'Aksesoris',
+                                'Komponen Lain'
+                            ];
+                            $selectedCategory = $product->category ?? old('category');
+                        @endphp
+                        <select name="category" required class="w-full border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all bg-white">
+                            <option value="" disabled {{ empty($selectedCategory) ? 'selected' : '' }}>Pilih Kategori Produk</option>
+                            @foreach($categories as $cat)
+                                <option value="{{ $cat }}" {{ $selectedCategory == $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>

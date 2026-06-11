@@ -80,29 +80,7 @@
                 </div>
             </section>
 
-            <section class="surface-card p-5 sm:p-6">
-                <span class="eyebrow">Instruksi</span>
-                <h2 class="mt-3 text-2xl font-black tracking-[-0.04em] text-ink">Cara membayar</h2>
-                <ol class="mt-5 space-y-3 text-sm font-semibold leading-6 text-slate-600">
-                    @switch($order->payment_method)
-                        @case('bank_bca')
-                        @case('bank_mandiri')
-                            @foreach(['Buka mobile banking, internet banking, atau ATM '.$selectedMethod['short'].'.', 'Pilih menu Transfer Virtual Account.', 'Masukkan nomor VA yang diberikan / tersedia.', 'Pastikan nominal sama persis: Rp '.number_format($order->total_price, 0, ',', '.').'.', 'Konfirmasi pembayaran lalu klik tombol Selesaikan Pembayaran.'] as $text)
-                                <li class="flex gap-3"><span class="text-primary font-black">{{ $loop->iteration }}.</span><span>{{ $text }}</span></li>
-                            @endforeach
-                            @break
-                        @case('qris')
-                            @foreach(['Buka aplikasi e-wallet atau mobile banking yang mendukung QRIS.', 'Pilih menu Scan QRIS.', 'Scan QR yang tampil di halaman ini.', 'Cek total pembayaran dan konfirmasi.', 'Klik tombol pembayaran untuk mengubah status order.'] as $text)
-                                <li class="flex gap-3"><span class="text-primary font-black">{{ $loop->iteration }}.</span><span>{{ $text }}</span></li>
-                            @endforeach
-                            @break
-                        @default
-                            @foreach(['Buka aplikasi e-wallet pilihan Anda.', 'Pilih menu Bayar Tagihan atau E-Commerce.', 'Masukkan kode pembayaran yang sesuai.', 'Pastikan merchant TechPart dan nominal sudah benar.', 'Klik tombol pembayaran untuk menyelesaikan transaksi.'] as $text)
-                                <li class="flex gap-3"><span class="text-primary font-black">{{ $loop->iteration }}.</span><span>{{ $text }}</span></li>
-                            @endforeach
-                    @endswitch
-                </ol>
-            </section>
+
 
             @if(!$isPaid)
                 <section class="surface-card p-5 sm:p-6">

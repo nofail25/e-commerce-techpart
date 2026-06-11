@@ -29,7 +29,7 @@
                     </div>
                     <div class="rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur xl:mt-10">
                         <i data-lucide="badge-check" class="h-7 w-7 text-mint"></i>
-                        <div class="mt-6 text-3xl font-black tracking-[-0.05em]">Pasti Bergaransi</div>
+                        <div class="mt-6 text-3xl font-black tracking-[-0.05em]">Produk Berkualitas</div>
                         <p class="mt-2 text-sm leading-6 text-slate-300">Dapatkan produk berkualitas dengan stok terjamin, ulasan terpercaya, dan nikmati penawaran harga spesial khusus mitra!</p>
                     </div>
                 </div>
@@ -42,19 +42,20 @@
             <div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <span class="eyebrow">Kategori</span>
-                    <h2 class="mt-3 text-2xl font-black tracking-[-0.04em] text-ink">Temukan Kebutuhan Anda</h2>
                 </div>
-                <p class="max-w-md text-sm leading-6 text-slate-500">Pilihan kategori ringkas yang dirancang khusus agar Anda bisa langsung belanja sparepart incaran tanpa ribet.</p>
             </div>
 
-            <div class="hide-scrollbar flex gap-3 overflow-x-auto pb-2 md:grid md:grid-cols-5 md:overflow-visible md:pb-0">
+            <div class="hide-scrollbar flex gap-4 overflow-x-auto pb-8 pt-6 px-2 snap-x">
                 @php
                     $categories = [
                         ['label' => 'Semua', 'value' => '', 'icon' => 'layout-grid'],
                         ['label' => 'Layar LCD', 'value' => 'LCD Layar HP', 'icon' => 'smartphone'],
                         ['label' => 'Baterai Ori', 'value' => 'Baterai Ori', 'icon' => 'battery-charging'],
-                        ['label' => 'Komponen Lain', 'value' => 'Komponen Lain', 'icon' => 'settings-2'],
+                        ['label' => 'Konektor', 'value' => 'Konektor', 'icon' => 'plug-2'],
+                        ['label' => 'IC / Chipset', 'value' => 'IC / Chipset', 'icon' => 'cpu'],
+                        ['label' => 'Kamera', 'value' => 'Kamera', 'icon' => 'camera'],
                         ['label' => 'Aksesoris', 'value' => 'Aksesoris', 'icon' => 'headphones'],
+                        ['label' => 'Komponen Lain', 'value' => 'Komponen Lain', 'icon' => 'settings-2'],
                     ];
                 @endphp
 
@@ -63,10 +64,18 @@
                     <a href="{{ $category['value'] ? url('/katalog?category=' . urlencode($category['value'])) : url('/katalog') }}"
                        data-category-link
                        data-category="{{ $category['value'] }}"
-                       class="category-chip flex-none staggered-item-delayed {{ $active ? 'is-active' : '' }}"
-                       style="--item-index: {{ $loop->index }}">
-                        <span class="category-icon"><i data-lucide="{{ $category['icon'] }}" class="h-5 w-5"></i></span>
-                        <span class="text-sm font-black">{{ $category['label'] }}</span>
+                       class="group relative flex min-w-[130px] flex-col items-center justify-center gap-4 overflow-hidden rounded-[2rem] border bg-white p-5 shadow-soft transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/20 snap-start {{ $active ? 'border-primary ring-2 ring-primary ring-offset-2' : 'border-slate-100 hover:border-primary/30' }}">
+                        
+                        <!-- Animated background -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-primary-50 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+                        
+                        <!-- Icon container -->
+                        <span class="relative flex h-16 w-16 items-center justify-center rounded-2xl {{ $active ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'bg-slate-50 text-slate-400 group-hover:bg-primary-100 group-hover:text-primary group-hover:scale-110' }} transition-all duration-300">
+                            <i data-lucide="{{ $category['icon'] }}" class="h-7 w-7"></i>
+                        </span>
+                        
+                        <!-- Label -->
+                        <span class="relative text-center text-sm font-black tracking-tight {{ $active ? 'text-primary' : 'text-slate-600 group-hover:text-primary' }}">{{ $category['label'] }}</span>
                     </a>
                 @endforeach
             </div>
@@ -135,8 +144,8 @@
                 <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <span class="eyebrow">Produk Terlaris</span>
-                        <h2 class="mt-3 text-3xl font-black tracking-[-0.05em] text-ink">Rekomendasi Spesial</h2>
-                        <p class="mt-2 text-sm leading-6 text-slate-500">Kurasi sparepart terbaik dan paling banyak dicari, khusus untuk Anda hari ini!</p>
+                        <h2 id="katalog_title" class="mt-3 text-3xl font-black tracking-[-0.05em] text-ink">Rekomendasi Spesial</h2>
+                        <p id="katalog_desc" class="mt-2 text-sm leading-6 text-slate-500">Kurasi sparepart terbaik dan paling banyak dicari, khusus untuk Anda hari ini!</p>
                     </div>
                 </div>
 
@@ -165,7 +174,45 @@
             function updateCategoryActiveState() {
                 categoryLinks.forEach((link) => {
                     const isActive = link.dataset.category === selectedCategory;
-                    link.classList.toggle('is-active', isActive);
+                    
+                    // Element references
+                    const iconWrapper = link.querySelector('span.rounded-2xl');
+                    const textSpan = link.querySelector('span.text-center');
+
+                    if (isActive) {
+                        // Card
+                        link.classList.remove('border-slate-100', 'hover:border-primary/30');
+                        link.classList.add('border-primary', 'ring-2', 'ring-primary', 'ring-offset-2');
+                        // Icon
+                        iconWrapper.classList.remove('bg-slate-50', 'text-slate-400', 'group-hover:bg-primary-100', 'group-hover:text-primary', 'group-hover:scale-110');
+                        iconWrapper.classList.add('bg-primary', 'text-white', 'shadow-lg', 'shadow-primary/30');
+                        // Text
+                        textSpan.classList.remove('text-slate-600', 'group-hover:text-primary');
+                        textSpan.classList.add('text-primary');
+                        
+                        // Update dynamic heading text
+                        const titleEl = document.getElementById('katalog_title');
+                        const descEl = document.getElementById('katalog_desc');
+                        if (titleEl && descEl) {
+                            if (!selectedCategory) {
+                                titleEl.textContent = 'Rekomendasi Spesial';
+                                descEl.textContent = 'Kurasi sparepart terbaik dan paling banyak dicari, khusus untuk Anda hari ini!';
+                            } else {
+                                titleEl.textContent = `Pilihan ${selectedCategory}`;
+                                descEl.textContent = `Temukan berbagai macam ${selectedCategory} berkualitas tinggi yang cocok untuk perangkat Anda.`;
+                            }
+                        }
+                    } else {
+                        // Card
+                        link.classList.remove('border-primary', 'ring-2', 'ring-primary', 'ring-offset-2');
+                        link.classList.add('border-slate-100', 'hover:border-primary/30');
+                        // Icon
+                        iconWrapper.classList.remove('bg-primary', 'text-white', 'shadow-lg', 'shadow-primary/30');
+                        iconWrapper.classList.add('bg-slate-50', 'text-slate-400', 'group-hover:bg-primary-100', 'group-hover:text-primary', 'group-hover:scale-110');
+                        // Text
+                        textSpan.classList.remove('text-primary');
+                        textSpan.classList.add('text-slate-600', 'group-hover:text-primary');
+                    }
                 });
             }
 

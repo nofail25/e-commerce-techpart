@@ -96,21 +96,16 @@ class CartController extends Controller
             $subtotal += $hargaAktif * $item->qty;
         }
 
-        $pajak = $subtotal * 0.11;
-        $totalAkhir = $subtotal + $pajak;
+        $totalAkhir = $subtotal;
 
-        return view('keranjang', compact('cartItems', 'subtotal', 'pajak', 'totalAkhir', 'isMitra', 'addresses', 'paymentMethods'));
+        return view('keranjang', compact('cartItems', 'subtotal', 'totalAkhir', 'isMitra', 'addresses', 'paymentMethods'));
     }
 
-    // --- FUNGSI 3: CHECKOUT DENGAN SISTEM BUKU ALAMAT ---
+    // --- FUNGSI 3: CHECKOUT ---
     public function checkout(Request $request)
     {
-        // Validasi pilihan alamat dan cart_ids
+        // Validasi pilihan cart_ids
         $request->validate([
-            'address_option' => 'required',
-            'new_label' => 'required_if:address_option,new',
-            'new_address' => 'required_if:address_option,new',
-            'payment_method' => 'required|in:' . implode(',', array_keys($this->paymentMethods())),
             'cart_ids' => 'required|array',
             'cart_ids.*' => 'exists:carts,id',
         ]);
@@ -124,23 +119,6 @@ class CartController extends Controller
 
         if ($cartItems->isEmpty()) {
             return back()->withErrors(['error' => 'Pilih setidaknya satu produk untuk checkout!']);
-        }
-
-        // TENTUKAN ALAMAT PENGIRIMAN
-        if ($request->address_option === 'new') {
-            // Jika pilih tambah alamat baru, simpan ke database
-            $alamatBaru = \App\Models\UserAddress::create([
-                'user_id' => Auth::id(),
-                'label' => $request->new_label,
-                'address' => $request->new_address
-            ]);
-            $shipping_address = $alamatBaru->address;
-        } else {
-            // Jika pilih alamat yang sudah ada, ambil datanya
-            $alamatLama = \App\Models\UserAddress::findOrFail($request->address_option);
-            // Pastikan alamat ini benar milik user yang login (Keamanan)
-            if ($alamatLama->user_id !== Auth::id()) abort(403);
-            $shipping_address = $alamatLama->address;
         }
 
         // Validasi Stok
@@ -158,14 +136,14 @@ class CartController extends Controller
             'user_id' => Auth::id(),
             'status' => 'pending',
             'total_price' => 0,
-            'shipping_address' => $shipping_address, // <--- Gunakan alamat yang sudah ditentukan di atas
-            'payment_method' => $request->payment_method,
+            'shipping_address' => null, // <--- Akan diisi di tahap selanjutnya
+            'payment_method' => null,
             'payment_status' => 'unpaid',
-            'payment_code' => $this->generatePaymentCode($request->payment_method),
-            'payment_expires_at' => now()->addHours(24),
+            'payment_code' => null,
+            'payment_expires_at' => null,
         ]);
 
-        // Proses Potong Stok & Catat Detail Barang
+        // Catat Detail Barang (Stok belum dipotong)
         foreach ($cartItems as $item) {
             $hargaAktif = $isMitra ? $item->product->priceMitra : $item->product->priceRetail;
             $subtotal += $hargaAktif * $item->qty;
@@ -176,19 +154,68 @@ class CartController extends Controller
                 'qty' => $item->qty,
                 'price' => $hargaAktif
             ]);
-
-            $product = $item->product;
-            $product->stock -= $item->qty;
-            $product->save();
         }
 
-        // Hitung Pajak dan Total
-        $pajak = $subtotal * 0.11;
-        $order->total_price = $subtotal + $pajak;
+        // Hitung Total
+        $order->total_price = $subtotal;
         $order->save();
 
         // Kosongkan keranjang (hanya item yang dicheckout)
         Cart::where('user_id', Auth::id())->whereIn('id', $cartIds)->delete();
+
+        return redirect('/pesanan/' . $order->id . '/lengkap');
+    }
+
+    public function lengkap($id)
+    {
+        $order = Order::where('user_id', Auth::id())->findOrFail($id);
+        
+        // Jika sudah lengkap, langsung ke pembayaran
+        if ($order->shipping_address && $order->payment_method) {
+            return redirect('/pembayaran/' . $order->id);
+        }
+
+        $addresses = \App\Models\UserAddress::where('user_id', Auth::id())->get();
+        $paymentMethods = $this->paymentMethods();
+
+        return view('lengkap_pesanan', compact('order', 'addresses', 'paymentMethods'));
+    }
+
+    public function simpanLengkap(Request $request, $id)
+    {
+        $order = Order::where('user_id', Auth::id())->findOrFail($id);
+
+        $request->validate([
+            'address_option' => 'required',
+            'new_label' => 'required_if:address_option,new',
+            'new_address' => 'required_if:address_option,new',
+            'payment_method' => 'required|in:' . implode(',', array_keys($this->paymentMethods())),
+        ]);
+
+        if ($request->address_option === 'new') {
+            $fullAddress = $request->new_address;
+            if ($request->filled('detail_address')) {
+                $fullAddress .= ' (' . $request->detail_address . ')';
+            }
+
+            $alamatBaru = \App\Models\UserAddress::create([
+                'user_id' => Auth::id(),
+                'label' => $request->new_label,
+                'address' => $fullAddress
+            ]);
+            $shipping_address = $alamatBaru->address;
+        } else {
+            $alamatLama = \App\Models\UserAddress::findOrFail($request->address_option);
+            if ($alamatLama->user_id !== Auth::id()) abort(403);
+            $shipping_address = $alamatLama->address;
+        }
+
+        $order->update([
+            'shipping_address' => $shipping_address,
+            'payment_method' => $request->payment_method,
+            'payment_code' => $this->generatePaymentCode($request->payment_method),
+            'payment_expires_at' => now()->addHours(24),
+        ]);
 
         return redirect('/pembayaran/' . $order->id)->with('success', 'Checkout berhasil. Silakan selesaikan pembayaran Anda.');
     }
@@ -199,17 +226,11 @@ class CartController extends Controller
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
-        $paymentMethods = $this->paymentMethods();
-
-        if (!$order->payment_method && $order->status === 'pending') {
-            $order->update([
-                'payment_method' => 'bank_bca',
-                'payment_status' => $order->payment_status ?: 'unpaid',
-                'payment_code' => $this->generatePaymentCode('bank_bca'),
-                'payment_expires_at' => now()->addHours(24),
-            ]);
+        if (!$order->shipping_address || !$order->payment_method) {
+            return redirect('/pesanan/' . $order->id . '/lengkap');
         }
 
+        $paymentMethods = $this->paymentMethods();
         $selectedMethod = $paymentMethods[$order->payment_method] ?? $paymentMethods['bank_bca'];
 
         return view('pembayaran', compact('order', 'paymentMethods', 'selectedMethod'));
@@ -238,10 +259,25 @@ class CartController extends Controller
 
     public function prosesPembayaran($id)
     {
-        $order = Order::where('user_id', Auth::id())->findOrFail($id);
+        $order = Order::with('details.product')->where('user_id', Auth::id())->findOrFail($id);
 
         if ($order->status !== 'pending') {
             return redirect('/pesanan-saya')->with('success', 'Pembayaran pesanan ini sudah diproses.');
+        }
+
+        // Cek stok kembali
+        foreach ($order->details as $detail) {
+            $product = $detail->product;
+            if ($product->stock < $detail->qty) {
+                return back()->with('error', 'Maaf, pembayaran gagal diproses karena stok ' . $product->name . ' tidak mencukupi.');
+            }
+        }
+
+        // Potong stok
+        foreach ($order->details as $detail) {
+            $product = $detail->product;
+            $product->stock -= $detail->qty;
+            $product->save();
         }
 
         $order->update([
